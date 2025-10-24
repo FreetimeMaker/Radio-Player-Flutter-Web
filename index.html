@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html>
 <head>
   <!--
@@ -15,7 +14,7 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="/Radio/">
+  <base href="/Radio-Player-Flutter-Web/">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -28,35 +27,72 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+<script>
+    window.addEventListener("load", function () {
+        if (!parent) {
+            console.log("Not IFrame");
+        }
+        console.log("launchMain");
+        parent?.postMessage({ sender: "frame", type: "launchMain" }, "*");
+    });
+
+    let _console;
+    initConsole();
+    function initConsole() {
+        _console = window.console;
+        window.console = {
+            ..._console,
+            log: function (msg) {
+                sendLog(msg, "text");
+                _console.log.apply(_console, arguments);
+            },
+            info: function (msg) {
+                sendLog(msg, "info");
+                _console.info.apply(_console, arguments);
+            },
+            warn: function (msg) {
+                sendLog(msg, "warning");
+                _console.warn.apply(_console, arguments);
+            },
+            error: function (msg) {
+                sendLog(msg, "error");
+                _console.error.apply(_console, arguments);
+            },
+        };
+        window.onerror = function (error) {
+            sendLog(error, "error");
+            sendError(error);
+        };
+        function sendLog(msg, type) {
+            // TODO: replace with post message
+            // type: log
+            // body => log:{message:msg,type:type}
+            //
+            window.parent.postMessage(
+                {
+                    sender: "frame",
+                    type: "log",
+                    log: { message: msg, type: type },
+                },
+                "*"
+            );
+        }
+        function sendError(error) {
+            // TODO: replace with post message
+            // type: error
+            // body => error
+            //
+            window.parent.postMessage(
+                {
+                    sender: "frame",
+                    type: "error",
+                    error: error,
+                },
+                "*"
+            );
+        }
+    }
+</script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
-=======
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/All.Pages.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+AT:ital,wght@0,100..400;1,100..400&family=Pixelify+Sans:wght@400..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Anton&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="Icons/favicon.ico">
-    <title>All about me</title>
-</head>
-<body>
-    <div class="r4">
-        <h1 class="Titel">Radio</h1>
-    </div>
-    <div class="r4">
-        
-    </div>
-    <div class="r4">
-        <footer>
-            &copy; 2025 Freetime Maker
-        </footer>
-    </div>
-</body>
-
-</html>
->>>>>>> bb85751 (Create index.html)
